@@ -5,23 +5,42 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: './dist/',
+    publicPath: '/dist/',
     filename: 'build.js'
   },
   module: {
     rules: [{
       test: /\.vue$/,
-      loader: 'vue',
+      loader: 'vue-loader',
       options: {
-        // vue-loader options go here
+        loaders: {}
+        // other vue-loader options go here
       }
     }, {
       test: /\.js$/,
-      loader: 'babel',
-      exclude: /node_modules/
+      loader: 'babel-loader',
+      exclude: /node_modules/,
+      query: {
+        presets: ['es2015']
+      },
+      // options: {
+      //   objectAssign: 'Object.assign'
+      // }
+    }, {
+      test: /\.styl$/,
+      loader: ['style-loader', 'css-loader', 'stylus-loader']
+    }, {
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader']
     }, {
       test: /\.(png|jpg|gif|svg)$/,
-      loader: 'file',
+      loader: 'file-loader',
+      options: {
+        name: '[name].[ext]?[hash]'
+      }
+    }, {
+      test: /\.(ttf|eot|otf|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+      loader: 'file-loader',
       options: {
         name: '[name].[ext]?[hash]'
       }
@@ -36,7 +55,10 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
-  devtool: '#eval-source-map'
+  performance: {
+    hints: false
+  },
+  devtool: '#eval-source-map',
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -49,6 +71,7 @@ if (process.env.NODE_ENV === 'production') {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
       compress: {
         warnings: false
       }
