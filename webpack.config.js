@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: './dist/',
+    publicPath: '/dist/',
     filename: 'build.js'
   },
   module: {
@@ -55,7 +55,10 @@ module.exports = {
     historyApiFallback: true,
     noInfo: true
   },
-  devtool: '#eval-source-map'
+  performance: {
+    hints: false
+  },
+  devtool: '#eval-source-map',
 }
 
 if (process.env.NODE_ENV === 'production') {
